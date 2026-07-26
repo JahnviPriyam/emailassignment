@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: email-scheduler-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npx prisma@5.22.0 generate && npm run build
+    startCommand: npx prisma@5.22.0 db push && npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: email-scheduler-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: email-scheduler-redis
+          property: connectionString
+
+  - type: redis
+    name: email-scheduler-redis
+    ipAllowList: [] # only allow internal connections from backend
+    plan: free
+
+databases:
+  - name: email-scheduler-db
+    databaseName: emailscheduler
+    plan: free
