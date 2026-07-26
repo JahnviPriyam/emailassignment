@@ -1,0 +1,38 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum JobStatus {
+  scheduled
+  queued
+  sending
+  sent
+  failed
+}
+
+model EmailJob {
+  id          String    @id @default(uuid())
+  recipient   String
+  subject     String
+  body        String    @db.Text
+  scheduledAt DateTime
+  sentAt      DateTime?
+  status      JobStatus @default(scheduled)
+  sender      String
+  delay       Int       @default(0)
+  hourlyLimit Int       @default(200)
+  batchId     String?
+  errorReason String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([sender])
+  @@index([scheduledAt])
+  @@index([batchId])
+}
