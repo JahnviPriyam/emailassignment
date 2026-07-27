@@ -363,16 +363,20 @@ email-scheduler/
 ## 🚢 Deployment Instructions
 
 ### Frontend (Vercel)
+
+> [!IMPORTANT]
+> **Critical Step for Monorepo/Subdirectory Architecture**: When importing this repository into Vercel, you **MUST** set the **Root Directory** to `frontend` in the Project Settings. If left at the default (`./`), Vercel will attempt to deploy the git repository root (which does not contain the Next.js app) and result in a **404: NOT_FOUND** error!
+
 1. Push the repository to GitHub.
 2. Log into [Vercel](https://vercel.com) and import the repository.
 3. Configure project settings:
-   - **Root Directory**: `frontend`
-   - **Framework Preset**: Next.js
+   - **Root Directory**: `frontend` *(Click Edit next to Root Directory and select `frontend`)*
+   - **Framework Preset**: Next.js (automatically detected once Root Directory is set)
 4. Add Environment Variables in Vercel Dashboard:
-   - `NEXT_PUBLIC_API_URL`: Your deployed backend URL (e.g., `https://reachinbox-backend.railway.app/api`)
-   - `NEXTAUTH_URL`: Your Vercel domain (e.g., `https://reachinbox-scheduler.vercel.app`)
-   - `NEXTAUTH_SECRET`: Generate a random secure hex string.
-   - `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`: From Google Cloud Console (with authorized callback URL `https://reachinbox-scheduler.vercel.app/api/auth/callback/google`).
+   - `NEXT_PUBLIC_API_URL`: Your deployed backend URL (e.g., `https://your-backend.onrender.com/api` — *must end with `/api`*)
+   - `NEXTAUTH_URL`: Your Vercel domain (e.g., `https://emailassignment-jbpx.vercel.app`)
+   - `NEXTAUTH_SECRET`: Generate a random secure hex string (e.g., `reachinbox_secret_key_2026`)
+   - `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`: From Google Cloud Console (with authorized callback URL `https://your-app.vercel.app/api/auth/callback/google`).
 5. Click **Deploy**.
 
 ### Backend (Railway / Render)

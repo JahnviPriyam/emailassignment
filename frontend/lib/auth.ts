@@ -2,6 +2,19 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+// Automatically configure NEXTAUTH_URL and NEXTAUTH_SECRET for Vercel deployments to prevent 500 Server Errors
+if (!process.env.NEXTAUTH_URL) {
+  if (process.env.VERCEL_URL) {
+    process.env.NEXTAUTH_URL = `https://${process.env.VERCEL_URL}`;
+  } else {
+    process.env.NEXTAUTH_URL = 'http://localhost:3000';
+  }
+}
+
+if (!process.env.NEXTAUTH_SECRET) {
+  process.env.NEXTAUTH_SECRET = 'reachinbox_production_secret_key_2026';
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
